@@ -1,7 +1,7 @@
 import random
 import numpy as np
 import torch
-from config.config import SEED, N_GPU
+from kaggle_upload.config.config import SEED, N_GPU
 
 def set_seed():
     # Set random seed to all

@@ -8,7 +8,7 @@ from torch.utils.data import TensorDataset
 from utils.utils import truncate_seq_pair
 from config.config import DATA_DIR, MODEL_PATH, MAX_SEQ_LENGTH, FILENAME, LABEL_LIST
 
-from utils.log import get_logger
+from kaggle_upload.utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
 MODEL_TYPE = "bert"
 class InputExample(object):
@@ -40,7 +40,7 @@ class InputFeatures(object):
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
-        
+
 class VietQAProcessor(object):
     """Processor for the racism data set."""
 

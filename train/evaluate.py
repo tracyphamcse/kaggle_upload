@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, SequentialSampler
 from sklearn.metrics import f1_score, classification_report
 
 from config.config import BATCH_SIZE, DEVICE
-from utils.load_data import load_and_cache_examples
+from kaggle_upload.utils.load_data import load_and_cache_examples
 
 from utils.log import get_logger, out_dir
 logger = get_logger(__file__.split("/")[-1])

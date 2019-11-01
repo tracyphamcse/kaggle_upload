@@ -3,14 +3,14 @@ from tqdm import tqdm, trange
 import torch
 from transformers import AdamW, WarmupLinearSchedule
 from torch.utils.data import DataLoader, RandomSampler
-from utils.log import out_dir
+from kaggle_upload.utils.log import out_dir
 
-from config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
+from kaggle_upload.config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
                             NUM_TRAIN_EPOCHS, DEVICE, MAX_GRAD_NORM, LOGGING_STEPS, EVALUATE_DURING_TRAINING)
 
-from utils.utils import set_seed
-from train.evaluate import evaluate
-from utils.log import get_logger
+from kaggle_upload.utils.utils import set_seed
+from kaggle_upload.train.evaluate import evaluate
+from kaggle_upload.utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
 
 def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
@@ -48,7 +48,7 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
     best_squad_f1 = 0
     best_zalo_f1 = 0
     best_f1 = 0
-    
+
     train_iterator = trange(int(NUM_TRAIN_EPOCHS), desc="Epoch", disable=False)
     for _ in train_iterator:
         epoch_iterator = tqdm(train_dataloader, desc="Iteration", disable=False)
@@ -69,7 +69,7 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
             scheduler.step()  # Update learning rate schedule
             model.zero_grad()
             global_step += 1
-            
+
         valid_loss, valid_f1, _ = evaluate(model, tokenizer, valid_dataset, "valid")
 #         test_loss, test_f1, _ = evaluate(model, tokenizer, test_dataset, "valid_fuzzy")
 
@@ -77,6 +77,6 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
             best_f1 = valid_f1
             model.save_pretrained(out_dir)
             logger.info("======> SAVE BEST MODEL | F1 = " + str(best_f1))
-            
-        
+
+
     return model, global_step, tr_loss / global_step
