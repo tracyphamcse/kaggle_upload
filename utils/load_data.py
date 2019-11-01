@@ -8,7 +8,7 @@ from torch.utils.data import TensorDataset
 from utils.utils import truncate_seq_pair
 from config.config import DATA_DIR, MODEL_PATH, MAX_SEQ_LENGTH, FILENAME, LABEL_LIST
 
-from kaggle_upload.utils.log import get_logger
+from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
 MODEL_TYPE = "bert"
 class InputExample(object):

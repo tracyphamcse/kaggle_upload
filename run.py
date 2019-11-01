@@ -1,12 +1,12 @@
-from kaggle_upload.config.config import MODEL_PATH, DO_LOWER_CASE
+from config.config import MODEL_PATH, DO_LOWER_CASE
 from transformers import BertConfig, BertForSequenceClassification, BertTokenizer
 
-from kaggle_upload.train.train import train
-from kaggle_upload.train.evaluate import evaluate
+from train.train import train
+from train.evaluate import evaluate
 
-from kaggle_upload.utils.load_data import load_and_cache_examples
-from kaggle_upload.utils.utils import set_seed
-from kaggle_upload.utils.log import get_logger, out_dir
+from utils.load_data import load_and_cache_examples
+from utils.utils import set_seed
+from utils.log import get_logger, out_dir
 logger = get_logger(__file__.split("/")[-1])
 
 MODEL_TYPE = "bert"

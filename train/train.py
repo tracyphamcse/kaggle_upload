@@ -3,14 +3,14 @@ from tqdm import tqdm, trange
 import torch
 from transformers import AdamW, WarmupLinearSchedule
 from torch.utils.data import DataLoader, RandomSampler
-from kaggle_upload.utils.log import out_dir
+from utils.log import out_dir
 
-from kaggle_upload.config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
+from config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
                             NUM_TRAIN_EPOCHS, DEVICE, MAX_GRAD_NORM, LOGGING_STEPS, EVALUATE_DURING_TRAINING)
 
-from kaggle_upload.utils.utils import set_seed
-from kaggle_upload.train.evaluate import evaluate
-from kaggle_upload.utils.log import get_logger
+from utils.utils import set_seed
+from train.evaluate import evaluate
+from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
 
 def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
