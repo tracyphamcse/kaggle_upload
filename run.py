@@ -1,4 +1,4 @@
-from config.config import MODEL_PATH, MODEL_CLASSES, MODEL_TYPE, DO_LOWER_CASE
+from config.config import MODEL_PATH, MODEL_CLASSES, MODEL_TYPE, DO_LOWER_CASE, DEVICE
 
 from train.train import train
 from train.evaluate import evaluate
