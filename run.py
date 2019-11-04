@@ -17,12 +17,13 @@ def main():
     print (config)
 
     model = MODEL_CLASSES[MODEL_TYPE][1].from_pretrained(MODEL_PATH, from_tf=False, config=config)
-    model = dp.DataParallel(model, device_ids=DEVICE)
     no_decay = ['bias', 'LayerNorm.weight']
     optimizer_grouped_parameters = [
         {'params': [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)], 'weight_decay': WEIGHT_DECAY},
         {'params': [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
         ]
+
+    model = dp.DataParallel(model, device_ids=DEVICE)
 
     tokenizer = MODEL_CLASSES[MODEL_TYPE][2].from_pretrained(MODEL_PATH, do_lower_case=DO_LOWER_CASE)
     if (MODEL_TYPE == "xlm"):
