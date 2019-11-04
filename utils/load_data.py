@@ -5,12 +5,13 @@ import pandas as pd
 
 import torch
 from torch.utils.data import TensorDataset
-from utils.utils import truncate_seq_pair
-from config.config import DATA_DIR, MODEL_PATH, MAX_SEQ_LENGTH, FILENAME, LABEL_LIST
+from utils.utils import *
+from config.config import DATA_DIR, MODEL_PATH, MAX_SEQ_LENGTH, FILENAME, MODEL_TYPE, LABEL_LIST
 
 from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
-MODEL_TYPE = "bert"
+
+
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
 
@@ -40,7 +41,7 @@ class InputFeatures(object):
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
-
+        
 class VietQAProcessor(object):
     """Processor for the racism data set."""
 
@@ -54,8 +55,8 @@ class VietQAProcessor(object):
         examples = []
         for (i, line) in enumerate(lines):
             guid = "%s-%s" % (set_type, i)
-            text_a = line[0].lower()
-            text_b = line[1].lower()
+            text_a = remove_nonlatin(line[0])
+            text_b = remove_nonlatin(line[1])
             label = line[2]
             examples.append(
                 InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))

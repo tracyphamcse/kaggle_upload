@@ -2,6 +2,7 @@ import random
 import numpy as np
 import torch
 from config.config import SEED, N_GPU
+import regex
 
 def set_seed():
     # Set random seed to all
@@ -26,3 +27,6 @@ def truncate_seq_pair(tokens_a, tokens_b, max_length):
             tokens_a.pop()
         else:
             tokens_b.pop()
+def remove_nonlatin(text):
+    text = text.lower()
+    return regex.sub(u'[^\p{Latin} \n {0-9}]', u'', text)
