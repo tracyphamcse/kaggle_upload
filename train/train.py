@@ -13,7 +13,6 @@ from utils.utils import set_seed
 from train.evaluate import evaluate
 from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
-import torch_xla.core.xla_model as xm
 
 def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
 
@@ -31,6 +30,7 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
     T_TOTAL = int(len(train_dataloader) * NUM_TRAIN_EPOCHS)
     WARMUP_STEP = int((T_TOTAL/10*5) * WARMUP_PROPORTION)
     scheduler = WarmupLinearSchedule(optimizer, warmup_steps=WARMUP_STEP, t_total=T_TOTAL)
+    tracker = xm.RateTracker()
 
     # Train!
     logger.info("***** Running training *****")
@@ -73,6 +73,7 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
             scheduler.step()  # Update learning rate schedule
             model.zero_grad()
             global_step += 1
+
 
         valid_loss, valid_f1, _ = evaluate(model, tokenizer, valid_dataset, "valid")
 
