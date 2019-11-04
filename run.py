@@ -17,7 +17,7 @@ def main():
     print (config)
 
     model = MODEL_CLASSES[MODEL_TYPE][1].from_pretrained(MODEL_PATH, from_tf=False, config=config)
-    model_parallel = dp.DataParallel(MNIST, device_ids=DEVICE)
+    # model = dp.DataParallel(MNIST, device_ids=DEVICE)
 
     tokenizer = MODEL_CLASSES[MODEL_TYPE][2].from_pretrained(MODEL_PATH, do_lower_case=DO_LOWER_CASE)
     if (MODEL_TYPE == "xlm"):
