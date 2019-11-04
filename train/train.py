@@ -3,7 +3,6 @@ from tqdm import tqdm, trange
 import torch
 from pytorch_transformers import AdamW, WarmupLinearSchedule
 from torch.utils.data import DataLoader, RandomSampler
-from tensorboardX import SummaryWriter
 from utils.log import out_dir
 
 from config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
