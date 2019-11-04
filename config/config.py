@@ -3,8 +3,8 @@ import torch_xla.core.xla_model as xm
 from pytorch_transformers import BertConfig, BertForSequenceClassification, BertTokenizer, XLMConfig, XLMForSequenceClassification, XLMTokenizer
 
 # DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# DEVICE = (xm.get_xla_supported_devices(max_devices=num_cores) if num_cores != 0 else [])
-DEVICE = xm.xla_device()
+DEVICE = (xm.get_xla_supported_devices(max_devices=num_cores) if num_cores != 0 else [])
+# DEVICE = xm.xla_device()
 print("Devices: {}".format(DEVICE))
 
 N_GPU = torch.cuda.device_count()

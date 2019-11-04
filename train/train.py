@@ -68,8 +68,8 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
             torch.nn.utils.clip_grad_norm_(model.parameters(), MAX_GRAD_NORM)
 
             tr_loss += loss.item()
-            optimizer.step()
-            # xm.optimizer_step(optimizer)
+            # optimizer.step()
+            xm.optimizer_step(optimizer)
             scheduler.step()  # Update learning rate schedule
             model.zero_grad()
             global_step += 1
