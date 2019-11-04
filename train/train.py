@@ -39,7 +39,7 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimize
 
     global_step = 0
     tr_loss, logging_loss = 0.0, 0.0
-    model.to(DEVICE)
+    # model.to(DEVICE)
     model.zero_grad()
     set_seed()  # Added here for reproductibility (even between python 2 and 3)
 
