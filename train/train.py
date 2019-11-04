@@ -13,7 +13,7 @@ from train.evaluate import evaluate
 from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
 
-def train(train_dataset, valid_dataset, test_dataset, model, tokenizer):
+def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimizer_grouped_parameters):
 
     """ Train the model """
     train_sampler = RandomSampler(train_dataset)

@@ -33,7 +33,7 @@ def main():
     valid_dataset = load_and_cache_examples(tokenizer, "valid")
     test_dataset = load_and_cache_examples(tokenizer, "test")
 
-    model, global_step, tr_loss = train(train_dataset, valid_dataset, test_dataset, model, tokenizer)
+    model, global_step, tr_loss = train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimizer_grouped_parameters)
     logger.info("global_step = %s, average loss = %s", global_step, tr_loss)
 
     eval_loss, f1, result = evaluate(model, tokenizer, test_dataset, "test")
