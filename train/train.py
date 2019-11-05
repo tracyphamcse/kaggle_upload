@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader, RandomSampler
 from utils.log import out_dir
 
 from config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
+                            MIN_LR, MAX_LR
                             NUM_TRAIN_EPOCHS, DEVICE, MAX_GRAD_NORM, LOGGING_STEPS, MODEL_TYPE, EVALUATE_DURING_TRAINING)
 
 from utils.utils import set_seed
@@ -16,7 +17,7 @@ logger = get_logger(__file__.split("/")[-1])
 
 # import torch_xla.core.xla_model as xm
 
-def cyclical_lr(stepsize, min_lr=5e-6, max_lr=3e-5):
+def cyclical_lr(stepsize, min_lr=MIN_LR, max_lr=MAX_LR):
 
     # Scaler: we can adapt this if we do not want the triangular CLR
     scaler = lambda x: 1.
