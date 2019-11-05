@@ -65,7 +65,7 @@ class VietQAProcessor(object):
     def _read_csv(cls, data_dir, filename, quotechar=None):
         """Reads a tab separated value file."""
         list_df = []
-        for file in input_file:
+        for file in filename:
             list_df.append(pd.read_csv(os.path.join(data_dir, file), lineterminator='\n'))
         df = pd.concat(list_df)
         lines = []
