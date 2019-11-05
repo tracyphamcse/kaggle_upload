@@ -8,7 +8,7 @@ from utils.utils import set_seed
 from utils.log import get_logger, out_dir
 logger = get_logger(__file__.split("/")[-1])
 
-import torch_xla.distributed.data_parallel as dp
+# import torch_xla.distributed.data_parallel as dp
 
 def main():
     set_seed()
