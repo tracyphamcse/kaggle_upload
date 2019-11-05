@@ -15,7 +15,7 @@ logger = get_logger(__file__.split("/")[-1])
 
 # import torch_xla.core.xla_model as xm
 
-def cyclical_lr(stepsize, min_lr=1e-5, max_lr=3e-5):
+def cyclical_lr(stepsize, min_lr=5e-6, max_lr=3e-5):
 
     # Scaler: we can adapt this if we do not want the triangular CLR
     scaler = lambda x: 1.
@@ -43,7 +43,7 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimize
     WARMUP_STEP = int((T_TOTAL/10*5) * WARMUP_PROPORTION)
     # scheduler = WarmupLinearSchedule(optimizer, warmup_steps=WARMUP_STEP, t_total=T_TOTAL)
     clr = cyclical_lr(T_TOTAL)
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, [clr])
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, [clr, clr])
 
     # Train!
     logger.info("***** Running training *****")
