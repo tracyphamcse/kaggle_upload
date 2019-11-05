@@ -15,6 +15,22 @@ logger = get_logger(__file__.split("/")[-1])
 
 # import torch_xla.core.xla_model as xm
 
+def cyclical_lr(stepsize, min_lr=1e-5, max_lr=3e-5):
+
+    # Scaler: we can adapt this if we do not want the triangular CLR
+    scaler = lambda x: 1.
+
+    # Lambda function to calculate the LR
+    lr_lambda = lambda it: min_lr + (max_lr - min_lr) * relative(it, stepsize)
+
+    # Additional function to see where on the cycle we are
+    def relative(it, stepsize):
+        cycle = math.floor(1 + it / (2 * stepsize))
+        x = abs(it / stepsize - 2 * cycle + 1)
+        return max(0, (1 - x)) * scaler(cycle)
+
+    return lr_lambda
+
 def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimizer_grouped_parameters):
 
     """ Train the model """
@@ -25,7 +41,9 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimize
     optimizer = AdamW(optimizer_grouped_parameters, lr=LEARNING_RATE, eps=ADAM_EPS)
     T_TOTAL = int(len(train_dataloader) * NUM_TRAIN_EPOCHS)
     WARMUP_STEP = int((T_TOTAL/10*5) * WARMUP_PROPORTION)
-    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=WARMUP_STEP, t_total=T_TOTAL)
+    # scheduler = WarmupLinearSchedule(optimizer, warmup_steps=WARMUP_STEP, t_total=T_TOTAL)
+    clr = cyclical_lr(T_TOTAL)
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, [clr])
 
     # Train!
     logger.info("***** Running training *****")
