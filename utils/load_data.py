@@ -48,7 +48,7 @@ class VietQAProcessor(object):
     def get_examples(self, prefix):
         """Gets the list of labels for this data set."""
         return self._create_examples(
-            self._read_csv(os.path.join(DATA_DIR, FILENAME[prefix])), prefix)
+            self._read_csv(DATA_DIR, FILENAME[prefix]), prefix)
 
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets."""
@@ -62,11 +62,11 @@ class VietQAProcessor(object):
                 InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
         return examples
 
-    def _read_csv(cls, input_file, quotechar=None):
+    def _read_csv(cls, data_dir, filename, quotechar=None):
         """Reads a tab separated value file."""
         list_df = []
         for file in input_file:
-            list_df.append(pd.read_csv(file, lineterminator='\n'))
+            list_df.append(pd.read_csv(os.path.join(data_dir, file), lineterminator='\n'))
         df = pd.concat(list_df)
         lines = []
         for i in range(len(df)):
