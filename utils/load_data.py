@@ -68,6 +68,8 @@ class VietQAProcessor(object):
         for file in filename:
             list_df.append(pd.read_csv(os.path.join(data_dir, file), lineterminator='\n'))
         df = pd.concat(list_df)
+        df = df.reset_index()
+        del df["index"]
         lines = []
         for i in range(len(df)):
             lines.append([df["question"][i], df["text"][i], df["label"][i]])
