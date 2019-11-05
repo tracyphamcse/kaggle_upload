@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, RandomSampler
 from utils.log import out_dir
 
 from config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
-                            MIN_LR, MAX_LR
+                            MIN_LR, MAX_LR,
                             NUM_TRAIN_EPOCHS, DEVICE, MAX_GRAD_NORM, LOGGING_STEPS, MODEL_TYPE, EVALUATE_DURING_TRAINING)
 
 from utils.utils import set_seed
