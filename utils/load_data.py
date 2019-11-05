@@ -41,7 +41,7 @@ class InputFeatures(object):
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
-        
+
 class VietQAProcessor(object):
     """Processor for the racism data set."""
 
@@ -64,7 +64,10 @@ class VietQAProcessor(object):
 
     def _read_csv(cls, input_file, quotechar=None):
         """Reads a tab separated value file."""
-        df = pd.read_csv(input_file, lineterminator='\n')
+        list_df = []
+        for file in input_file:
+            list_df.append(pd.read_csv(file, lineterminator='\n'))
+        df = pd.concat(list_df)
         lines = []
         for i in range(len(df)):
             lines.append([df["question"][i], df["text"][i], df["label"][i]])

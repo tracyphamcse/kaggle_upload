@@ -1,11 +1,11 @@
 import torch
-import torch_xla.core.xla_model as xm
 from pytorch_transformers import BertConfig, BertForSequenceClassification, BertTokenizer, XLMConfig, XLMForSequenceClassification, XLMTokenizer
+# import torch_xla.core.xla_model as xm
 
-# DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # num_cores = 8
 # DEVICE = (xm.get_xla_supported_devices(max_devices=num_cores) if num_cores != 0 else [])
-DEVICE = xm.xla_device()
+# DEVICE = xm.xla_device()
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Devices: {}".format(DEVICE))
 
 N_GPU = torch.cuda.device_count()
@@ -13,9 +13,10 @@ SEED = 1234
 
 DATA_DIR = "data/"
 FILENAME = {
-    "train": "train_and_squad_vn.csv",
-    "valid": "valid.csv",
-    "test": "valid.csv",
+    "train": ["train.csv"],
+    "train_squad_vn": ["train.csv", "squad_vn.csv"],
+    "squad_en": ["squad_en"],
+    "valid": ["valid.csv"],
 }
 DO_LOWER_CASE = False
 MAX_SEQ_LENGTH = 128
