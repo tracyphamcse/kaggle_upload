@@ -20,12 +20,12 @@ FILENAME = {
 }
 DO_LOWER_CASE = False
 MAX_SEQ_LENGTH = 128
-BATCH_SIZE = 1
+BATCH_SIZE = 16
 
 # 5e-6, 2.5e-5, 1.25e-4
-LEARNING_RATE = 2.5e-5
-# ADAM_EPS = 1e-8
-ADAM_EPS = 0.000025
+LEARNING_RATE = 2e-5
+ADAM_EPS = 1e-8
+# ADAM_EPS = 0.000025
 WARMUP_PROPORTION = 0.1
 MAX_GRAD_NORM = 1.0
 WEIGHT_DECAY = 0.01
@@ -34,11 +34,18 @@ NUM_TRAIN_EPOCHS = 4.0
 LOGGING_STEPS = 50
 EVALUATE_DURING_TRAINING = False
 
-MODEL_TYPE = "xlm"
-MODEL_PATH = "model/xlm"
+MODEL_TYPE = "bert_multilingual"
+MODEL_PATH = "model/bert_multilingual"
+
+# MODEL_TYPE = "bert_vietnamese"
+# MODEL_PATH = "model/bert_vietnamese"
+
+# MODEL_TYPE = "xlm"
+# MODEL_PATH = "model/xlm"
+
 MODEL_CLASSES = {
-    'bert': (BertConfig, BertForSequenceClassification, BertTokenizer),
-    'bert_uncased': (BertConfig, BertForSequenceClassification, BertTokenizer),
+    'bert_multilingual': (BertConfig, BertForSequenceClassification, BertTokenizer),
+    'bert_vietnamese': (BertConfig, BertForSequenceClassification, BertTokenizer),
     'xlm' : (XLMConfig, XLMForSequenceClassification, XLMTokenizer)
 }
 

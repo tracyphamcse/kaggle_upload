@@ -13,7 +13,7 @@ from train.evaluate import evaluate
 from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
 
-import torch_xla.core.xla_model as xm
+# import torch_xla.core.xla_model as xm
 
 def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimizer_grouped_parameters):
 
