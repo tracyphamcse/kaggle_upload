@@ -31,12 +31,11 @@ def main():
 
     train_dataset = load_and_cache_examples(tokenizer, "train")
     valid_dataset = load_and_cache_examples(tokenizer, "valid")
-    test_dataset = load_and_cache_examples(tokenizer, "test")
 
-    model, global_step, tr_loss = train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimizer_grouped_parameters)
+    model, global_step, tr_loss = train(train_dataset, valid_dataset, valid_dataset, model, tokenizer, optimizer_grouped_parameters)
     logger.info("global_step = %s, average loss = %s", global_step, tr_loss)
 
-    eval_loss, f1, result = evaluate(model, tokenizer, test_dataset, "test")
+    eval_loss, f1, result = evaluate(model, tokenizer, valid_dataset, "valid")
     logger.info("Final evaluate: eval_loss = %s, f1 = %s", eval_loss, f1)
     logger.info(result)
 
