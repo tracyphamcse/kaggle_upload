@@ -23,12 +23,13 @@ MAX_SEQ_LENGTH = 128
 BATCH_SIZE = 16
 
 # 5e-6, 2.5e-5, 1.25e-4
+LEARNING_RATE = 2e-5
 LEARNING_RATE = 1.
 MIN_LR = 2e-5
 MAX_LR = 5e-5
 ADAM_EPS = 1e-8
 # ADAM_EPS = 0.000025
-WARMUP_PROPORTION = 0.1
+WARMUP_PROPORTION = 0.5
 MAX_GRAD_NORM = 1.0
 WEIGHT_DECAY = 0.01
 
@@ -37,7 +38,7 @@ LOGGING_STEPS = 50
 EVALUATE_DURING_TRAINING = False
 
 MODEL_TYPE = "bert_multilingual"
-MODEL_PATH = "model/bert_multilingual"
+MODEL_PATH = "model/bert_multilang_round3"
 
 # MODEL_TYPE = "bert_vietnamese"
 # MODEL_PATH = "model/bert_vietnamese"

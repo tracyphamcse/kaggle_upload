@@ -43,9 +43,9 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimize
     optimizer = AdamW(optimizer_grouped_parameters, lr=LEARNING_RATE, eps=ADAM_EPS)
     T_TOTAL = int(len(train_dataloader) * NUM_TRAIN_EPOCHS)
     WARMUP_STEP = int((T_TOTAL/10*5) * WARMUP_PROPORTION)
-    # scheduler = WarmupLinearSchedule(optimizer, warmup_steps=WARMUP_STEP, t_total=T_TOTAL)
-    clr = cyclical_lr(T_TOTAL)
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, [clr, clr])
+    scheduler = WarmupLinearSchedule(optimizer, warmup_steps=WARMUP_STEP, t_total=T_TOTAL)
+    # clr = cyclical_lr(T_TOTAL)
+    # scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, [clr, clr])
 
     # Train!
     logger.info("***** Running training *****")

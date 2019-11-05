@@ -29,7 +29,7 @@ def main():
     if (MODEL_TYPE == "xlm"):
         tokenizer = MODEL_CLASSES[MODEL_TYPE][2].from_pretrained(MODEL_PATH, do_lowercase_and_remove_accent=DO_LOWER_CASE)
 
-    train_dataset = load_and_cache_examples(tokenizer, "train")
+    train_dataset = load_and_cache_examples(tokenizer, "train_squad_vn")
     valid_dataset = load_and_cache_examples(tokenizer, "valid")
 
     model, global_step, tr_loss = train(train_dataset, valid_dataset, valid_dataset, model, tokenizer, optimizer_grouped_parameters)
