@@ -29,19 +29,11 @@ def main():
     if (MODEL_TYPE == "xlm"):
         tokenizer = MODEL_CLASSES[MODEL_TYPE][2].from_pretrained(MODEL_PATH, do_lowercase_and_remove_accent=DO_LOWER_CASE)
 
-    train_dataset = load_and_cache_examples(tokenizer, "train_squad_vn")
-    valid_dataset = load_and_cache_examples(tokenizer, "valid")
+    train_dataset = load_and_cache_examples(tokenizer, "train_squad_vn_4")
+    valid_dataset = load_and_cache_examples(tokenizer, "valid_4")
 
     model, global_step, tr_loss = train(train_dataset, valid_dataset, valid_dataset, model, tokenizer, optimizer_grouped_parameters)
     logger.info("global_step = %s, average loss = %s", global_step, tr_loss)
-
-    eval_loss, f1, result = evaluate(model, tokenizer, valid_dataset, "valid")
-    logger.info("Final evaluate: eval_loss = %s, f1 = %s", eval_loss, f1)
-    logger.info(result)
-
-#     logger.info("Save model to {}".format(out_dir))
-#     model.save_pretrained(out_dir)
-
 
 if __name__ == "__main__":
     main()

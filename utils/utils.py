@@ -23,10 +23,9 @@ def truncate_seq_pair(tokens_a, tokens_b, max_length):
         total_length = len(tokens_a) + len(tokens_b)
         if total_length <= max_length:
             break
-        if len(tokens_a) > len(tokens_b):
-            tokens_a.pop()
-        else:
-            tokens_b.pop()
+        tokens_b.pop()
+
 def remove_nonlatin(text):
-    text = text.lower()
-    return regex.sub(u'[^\p{Latin} \n {0-9}]', u'', text)
+    # text = text.lower()
+#     text = regex.sub(u'[^\p{Latin} \n {0-9}]', u'', text)
+    return " ".join(text.split())

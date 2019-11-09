@@ -13,18 +13,24 @@ SEED = 1234
 
 DATA_DIR = "data/"
 FILENAME = {
-    "train": ["train.csv"],
-    "train_squad_vn": ["train.csv", "squad_vn.csv"],
-    "squad_en": ["squad_en"],
-    "valid": ["valid.csv"],
+    "train_squad_vn_0": ["new_split_train_0.csv", "squad_vn.csv"],
+    "valid_0": ["new_split_valid_0.csv"],
+    "train_squad_vn_1": ["new_split_train_1.csv", "squad_vn.csv"],
+    "valid_1": ["new_split_valid_1.csv"],
+    "train_squad_vn_2": ["new_split_train_2.csv", "squad_vn.csv"],
+    "valid_2": ["new_split_valid_2.csv"],
+    "train_squad_vn_3": ["new_split_train_3.csv", "squad_vn.csv"],
+    "valid_3": ["new_split_valid_3.csv"],
+    "train_squad_vn_4": ["new_split_train_4.csv", "squad_vn.csv"],
+    "valid_4": ["new_split_valid_4.csv"],
 }
 DO_LOWER_CASE = False
 MAX_SEQ_LENGTH = 128
-BATCH_SIZE = 16
+BATCH_SIZE = 8
 
 # 5e-6, 2.5e-5, 1.25e-4
 LEARNING_RATE = 2e-5
-LEARNING_RATE = 1.
+# LEARNING_RATE = 1.
 MIN_LR = 2e-5
 MAX_LR = 5e-5
 ADAM_EPS = 1e-8
@@ -37,14 +43,14 @@ NUM_TRAIN_EPOCHS = 4.0
 LOGGING_STEPS = 50
 EVALUATE_DURING_TRAINING = False
 
-MODEL_TYPE = "bert_multilingual"
-MODEL_PATH = "model/bert_multilang_round3"
-
+# MODEL_TYPE = "bert_multilingual"
+# MODEL_PATH = "model/bert_multilang_round3"
+#
 # MODEL_TYPE = "bert_vietnamese"
-# MODEL_PATH = "model/bert_vietnamese"
+# MODEL_PATH = "model/bert_vietnamese_round17"
 
-# MODEL_TYPE = "xlm"
-# MODEL_PATH = "model/xlm"
+MODEL_TYPE = "xlm"
+MODEL_PATH = "model/xlm"
 
 MODEL_CLASSES = {
     'bert_multilingual': (BertConfig, BertForSequenceClassification, BertTokenizer),
