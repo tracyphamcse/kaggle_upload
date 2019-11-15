@@ -6,7 +6,7 @@ import pandas as pd
 import torch
 from torch.utils.data import TensorDataset
 from utils.utils import *
-from config.config import DATA_DIR, MODEL_PATH, MAX_SEQ_LENGTH, FILENAME, MODEL_TYPE, LABEL_LIST
+from config.config import *
 
 from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])

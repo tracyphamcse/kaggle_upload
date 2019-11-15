@@ -1,37 +1,18 @@
 from tqdm import tqdm, trange
 
-import torch
 import math
-from pytorch_transformers import AdamW, WarmupLinearSchedule
+import torch
+import torch.nn as nn
 from torch.utils.data import DataLoader, RandomSampler
+
+from transformers import AdamW, WarmupLinearSchedule
+
 from utils.log import out_dir
-
-from config.config import (BATCH_SIZE, LEARNING_RATE, ADAM_EPS, WARMUP_PROPORTION, WEIGHT_DECAY,
-                            MIN_LR, MAX_LR,
-                            NUM_TRAIN_EPOCHS, DEVICE, MAX_GRAD_NORM, LOGGING_STEPS, MODEL_TYPE, EVALUATE_DURING_TRAINING)
-
+from config.config import *
 from utils.utils import set_seed
 from train.evaluate import evaluate
 from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
-
-# import torch_xla.core.xla_model as xm
-
-def cyclical_lr(stepsize, min_lr=MIN_LR, max_lr=MAX_LR):
-
-    # Scaler: we can adapt this if we do not want the triangular CLR
-    scaler = lambda x: 1.
-
-    # Lambda function to calculate the LR
-    lr_lambda = lambda it: min_lr + (max_lr - min_lr) * relative(it, stepsize)
-
-    # Additional function to see where on the cycle we are
-    def relative(it, stepsize):
-        cycle = math.floor(1 + it / (2 * stepsize))
-        x = abs(it / stepsize - 2 * cycle + 1)
-        return max(0, (1 - x)) * scaler(cycle)
-
-    return lr_lambda
 
 def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimizer_grouped_parameters):
 
@@ -44,8 +25,6 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimize
     T_TOTAL = int(len(train_dataloader) * NUM_TRAIN_EPOCHS)
     WARMUP_STEP = int(T_TOTAL * WARMUP_PROPORTION)
     scheduler = WarmupLinearSchedule(optimizer, warmup_steps=WARMUP_STEP, t_total=T_TOTAL)
-    # clr = cyclical_lr(T_TOTAL)
-    # scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, [clr, clr])
 
     # Train!
     logger.info("***** Running training *****")
@@ -77,6 +56,13 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimize
                       'attention_mask': batch[1],
                       'token_type_ids': batch[2] if MODEL_TYPE in ['bert', 'xlnet'] else None,  # XLM don't use segment_ids
                       'labels':         batch[3]}
+            
+            try:
+                model.batch_size = len(batch[0])
+                model.lstm_hidden = model.init_hidden()
+            except:
+                pass
+            
             ouputs = model(**inputs)
             loss = ouputs[0]  # model outputs are always tuple in pytorch-transformers (see doc)
             loss.backward()

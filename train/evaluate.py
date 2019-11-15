@@ -27,7 +27,8 @@ def evaluate(model, tokenizer, eval_dataset, prefix):
     preds = None
     out_label_ids = None
 
-    for batch in eval_dataloader:
+    epoch_iterator = tqdm(eval_dataloader, desc="Iteration", disable=False)
+    for step, batch in enumerate(epoch_iterator):
         model.eval()
         batch = tuple(t.to(DEVICE) for t in batch)
 
@@ -37,6 +38,12 @@ def evaluate(model, tokenizer, eval_dataset, prefix):
                       'token_type_ids': batch[2] if MODEL_TYPE in ['bert', 'xlnet'] else None,  # XLM don't use segment_ids
                       'labels':         batch[3]}
 
+            try:
+                model.batch_size = len(batch[0])
+                model.lstm_hidden = model.init_hidden()
+            except:
+                pass
+            
             outputs = model(**inputs)
             tmp_eval_loss, logits = outputs[:2]
             eval_loss += tmp_eval_loss.mean().item()
