@@ -1,13 +1,13 @@
 import torch
 
 MODEL_TYPE = "bert"
-CLASSIFIER_TYPE = "BertForSequenceClassification"
+CLASSIFIER_TYPE = "BertBiLSTM_BAS"
 MODEL_PATH = "model/bert_multilingual_cased_vn_finetuned"
 
 
 
 SEED = 1234
-DEVICE = torch.device("cuda:1")
+DEVICE = torch.device("cuda")
 N_GPU = torch.cuda.device_count()
 print("Devices: {}, {}".format(DEVICE, N_GPU))
 
@@ -34,11 +34,13 @@ TRAIN_FILE = "train_0"
 VALID_FILE = "valid_0"
 
 DO_LOWER_CASE = False
-MAX_SEQ_LENGTH = 128
+MAX_SEQ_LENGTH = 352
+MAX_QUES_LENGTH = 32
+MAX_ANSW_LENGTH = 320
 BATCH_SIZE = 8
 
 # BAS 0.0001 | BERT 2e-5
-LEARNING_RATE = 2e-5
+LEARNING_RATE = 1.5e-5
 # XLM 0.000025
 ADAM_EPS = 1e-8
 

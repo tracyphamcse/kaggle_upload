@@ -40,7 +40,8 @@ def evaluate(model, tokenizer, eval_dataset, prefix):
 
             try:
                 model.batch_size = len(batch[0])
-                model.lstm_hidden = model.init_hidden()
+                model.lstm_hidden_1 = model.init_hidden()
+                model.lstm_hidden_2 = model.init_hidden()
             except:
                 pass
             

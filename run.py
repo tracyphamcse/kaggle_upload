@@ -1,13 +1,14 @@
 from config.config import *
 from transformers import BertForSequenceClassification
-from model.bertforsequence import BertBase, BertBiLSTM
+from model.bertforsequence import *
 
 from train.train import train
 from train.evaluate import evaluate
 
 from transformers import BertConfig, BertTokenizer
 
-from utils.load_data import load_and_cache_examples
+# from utils.load_data import load_and_cache_examples
+from utils.load_data_for_bas import load_and_cache_examples
 from utils.utils import set_seed
 from utils.log import get_logger, out_dir
 logger = get_logger(__file__.split("/")[-1])
@@ -15,7 +16,7 @@ logger = get_logger(__file__.split("/")[-1])
 
 def main():
     
-    TRANSFORMER_MODEL = BertBase
+    TRANSFORMER_MODEL = BertBiLSTM_BAS
    
     set_seed()
     
