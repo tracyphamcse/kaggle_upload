@@ -16,7 +16,7 @@ logger = get_logger(__file__.split("/")[-1])
 
 def main():
     
-    TRANSFORMER_MODEL = BertBiLSTM_BAS
+    TRANSFORMER_MODEL = BertBiLSTM_BAS_2
    
     set_seed()
     
@@ -47,6 +47,10 @@ def main():
     logger.info("  FC relu dim 2 = %f", RELU_DIM_2)
     logger.info("  Batch size= %f", BATCH_SIZE)
     logger.info("  Dropout = %f", DROPOUT)
+    
+    logger.info("  CNN Kernel = %f", KERNEL)
+    logger.info("  CNN Filters = %f", NUM_FILTERS)
+    logger.info("  Max Pooling Dim = %f", OUT_MAXPOOL_DIM)
     
     
     model, global_step, tr_loss = train(train_dataset, valid_dataset, valid_dataset, model, tokenizer, optimizer_grouped_parameters)
