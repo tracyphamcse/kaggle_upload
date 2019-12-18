@@ -1,5 +1,4 @@
 from tqdm import tqdm, trange
-
 import math
 import torch
 import torch.nn as nn
@@ -7,14 +6,13 @@ from torch.utils.data import DataLoader, RandomSampler
 
 from transformers import AdamW, WarmupLinearSchedule
 
-from utils.log import out_dir
 from config.config import *
 from utils.utils import set_seed
 from train.evaluate import evaluate
 from utils.log import get_logger
 logger = get_logger(__file__.split("/")[-1])
 
-def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimizer_grouped_parameters):
+def train(train_dataset, valid_dataset, model, tokenizer, optimizer_grouped_parameters, stored_dir):
 
     """ Train the model """
     train_sampler = RandomSampler(train_dataset)
@@ -71,17 +69,15 @@ def train(train_dataset, valid_dataset, test_dataset, model, tokenizer, optimize
 
             tr_loss += loss.item()
             optimizer.step()
-            # xm.optimizer_step(optimizer)
             scheduler.step()  # Update learning rate schedule
             model.zero_grad()
             global_step += 1
-
-
+            
         valid_loss, valid_f1, _ = evaluate(model, tokenizer, valid_dataset, "valid")
 
         if (valid_f1 > best_f1):
             best_f1 = valid_f1
-            model.save_pretrained(out_dir)
+            model.save_pretrained(stored_dir)
             logger.info("======> SAVE BEST MODEL | F1 = " + str(valid_f1))
 
     return model, global_step, tr_loss / global_step

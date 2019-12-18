@@ -94,72 +94,48 @@ def convert_examples_to_features(examples, tokenizer,
     for (ex_index, example) in enumerate(examples):
         if ex_index % 10000 == 0:
             logger.info("Writing example %d of %d" % (ex_index, len(examples)))
+            
         tokens_a = tokenizer.tokenize(example.text_a)
-
-        tokens_b = None
-        if example.text_b:
-            tokens_b = tokenizer.tokenize(example.text_b)
-            # Modifies `tokens_a` and `tokens_b` in place so that the total
-            # length is less than the specified length.
-            # Account for [CLS], [SEP], [SEP] with "- 3"
-            truncate_seq_pair(tokens_a, tokens_b, MAX_SEQ_LENGTH - 3)
-        else:
-            # Account for [CLS] and [SEP] with "- 2"
-            if len(tokens_a) > MAX_SEQ_LENGTH - 2:
-                tokens_a = tokens_a[:(MAX_SEQ_LENGTH - 2)]
-
-        # The convention in BERT is:
-        # (a) For sequence pairs:
-        #  tokens:   [CLS] is this jack ##son ##ville ? [SEP] no it is not . [SEP]
-        #  type_ids:   0   0  0    0    0     0       0   0   1  1  1  1   1   1
-        # (b) For single sequences:
-        #  tokens:   [CLS] the dog is hairy . [SEP]
-        #  type_ids:   0   0   0   0  0     0   0
-        #
-        # Where "type_ids" are used to indicate whether this is the first
-        # sequence or the second sequence. The embedding vectors for `type=0` and
-        # `type=1` were learned during pre-training and are added to the wordpiece
-        # embedding vector (and position vector). This is not *strictly* necessary
-        # since the [SEP] token unambiguously separates the sequences, but it makes
-        # it easier for the model to learn the concept of sequences.
-        #
-        # For classification tasks, the first vector (corresponding to [CLS]) is
-        # used as as the "sentence vector". Note that this only makes sense because
-        # the entire model is fine-tuned.
-        tokens = tokens_a + [sep_token]
-        segment_ids = [sequence_a_segment_id] * len(tokens)
-
-        if tokens_b:
-            tokens += tokens_b + [sep_token]
-            segment_ids += [sequence_b_segment_id] * (len(tokens_b) + 1)
+        if len(tokens_a) > MAX_QUES_LENGTH:
+            tokens_a = tokens_a[:(MAX_QUES_LENGTH)]
+        len_tokens_a = len(tokens_a)
+        len_padding_a = MAX_QUES_LENGTH - len_tokens_a
+        if len_tokens_a < MAX_QUES_LENGTH:
+            tokens_a = tokens_a + [pad_token] * (MAX_QUES_LENGTH - len_tokens_a)
+        tokens_a = tokens_a + [sep_token]
+        input_mask_a = [1 if mask_padding_with_zero else 0] * len_tokens_a + [0 if mask_padding_with_zero else 1] * len_padding_a + [1 if mask_padding_with_zero else 0] 
+        segment_ids_a = [sequence_a_segment_id] * len_tokens_a + [pad_token_segment_id] * len_padding_a + [sequence_a_segment_id]
+        
+        
+        tokens_b = tokenizer.tokenize(example.text_b)
+        if len(tokens_b) > MAX_ANSW_LENGTH:
+            tokens_b = tokens_b[:(MAX_ANSW_LENGTH)]
+        len_tokens_b = len(tokens_b)
+        len_padding_b = MAX_ANSW_LENGTH - len_tokens_b 
+        if len_tokens_b < MAX_ANSW_LENGTH:
+            tokens_b = tokens_b + [pad_token] * (MAX_ANSW_LENGTH - len_tokens_b)
+        tokens_b = tokens_b + [sep_token]
+        input_mask_b = [1 if mask_padding_with_zero else 0] * len_tokens_b + [0 if mask_padding_with_zero else 1] * len_padding_b + [1 if mask_padding_with_zero else 0] 
+        segment_ids_b = [sequence_b_segment_id] * len_tokens_b + [pad_token_segment_id] * len_padding_b + [sequence_b_segment_id]
+        
 
         if cls_token_at_end:
-            tokens = tokens + [cls_token]
-            segment_ids = segment_ids + [cls_token_segment_id]
+            tokens_b = tokens_b + [cls_token]
+            input_mask_b = input_mask_b + [1 if mask_padding_with_zero else 0]
+            segment_ids_b = segment_ids_b + [cls_token_segment_id]
         else:
-            tokens = [cls_token] + tokens
-            segment_ids = [cls_token_segment_id] + segment_ids
-
+            tokens_a = [cls_token] + tokens_a
+            input_mask_a = [1 if mask_padding_with_zero else 0] + input_mask_a
+            segment_ids_a = [cls_token_segment_id] + segment_ids_a
+    
+        tokens = tokens_a + tokens_b
         input_ids = tokenizer.convert_tokens_to_ids(tokens)
+        input_mask = input_mask_a + input_mask_b
+        segment_ids = segment_ids_a + segment_ids_b
 
-        # The mask has 1 for real tokens and 0 for padding tokens. Only real
-        # tokens are attended to.
-        input_mask = [1 if mask_padding_with_zero else 0] * len(input_ids)
-
-        # Zero-pad up to the sequence length.
-        padding_length = MAX_SEQ_LENGTH - len(input_ids)
-        if pad_on_left:
-            input_ids = ([pad_token] * padding_length) + input_ids
-            input_mask = ([0 if mask_padding_with_zero else 1] * padding_length) + input_mask
-            segment_ids = ([pad_token_segment_id] * padding_length) + segment_ids
-        else:
-            input_ids = input_ids + ([pad_token] * padding_length)
-            input_mask = input_mask + ([0 if mask_padding_with_zero else 1] * padding_length)
-            segment_ids = segment_ids + ([pad_token_segment_id] * padding_length)
-
-        assert len(input_ids) == MAX_SEQ_LENGTH
-        assert len(input_mask) == MAX_SEQ_LENGTH
-        assert len(segment_ids) == MAX_SEQ_LENGTH
+        assert len(input_ids) == MAX_QUES_LENGTH + MAX_ANSW_LENGTH + 3
+        assert len(input_mask) == MAX_QUES_LENGTH + MAX_ANSW_LENGTH + 3
+        assert len(segment_ids) == MAX_QUES_LENGTH + MAX_ANSW_LENGTH + 3
 
         label_id = label_map[example.label]
 

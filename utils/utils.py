@@ -1,7 +1,7 @@
 import random
 import numpy as np
 import torch
-from config.config import SEED, N_GPU
+from config.config import SEED
 import regex
 
 def set_seed():
@@ -9,8 +9,6 @@ def set_seed():
     random.seed(SEED)
     np.random.seed(SEED)
     torch.manual_seed(SEED)
-    if N_GPU > 0:
-        torch.cuda.manual_seed_all(SEED)
 
 def truncate_seq_pair(tokens_a, tokens_b, max_length):
     """Truncates a sequence pair in place to the maximum length."""
@@ -26,6 +24,4 @@ def truncate_seq_pair(tokens_a, tokens_b, max_length):
         tokens_b.pop()
 
 def remove_nonlatin(text):
-    # text = text.lower()
-#     text = regex.sub(u'[^\p{Latin} \n {0-9}]', u'', text)
     return " ".join(text.split())
