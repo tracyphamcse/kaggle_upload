@@ -2,7 +2,8 @@ import random
 import numpy as np
 import torch
 from config.config import SEED
-import regex
+import regex as re
+
 
 def set_seed():
     # Set random seed to all
@@ -22,6 +23,9 @@ def truncate_seq_pair(tokens_a, tokens_b, max_length):
         if total_length <= max_length:
             break
         tokens_b.pop()
-
+        
 def remove_nonlatin(text):
+    text = re.sub('<[^>]*>', ' ', text)
+    text = re.sub('[?!;:]+', '.', text)
+    text = re.sub('[^A-Za-z0-9.,;()\ ]+', '', text)
     return " ".join(text.split())

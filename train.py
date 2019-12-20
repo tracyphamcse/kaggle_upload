@@ -51,7 +51,7 @@ def main():
         
 
         # Load model
-        config = BertConfig.from_pretrained(MODEL_PATH, num_labels=2, finetuning_task="zalo")
+        config = BertConfig.from_pretrained(MODEL_PATH, num_labels=LABEL_SIZE, finetuning_task="kaggle")
         model = TRANSFORMER_MODEL.from_pretrained(MODEL_PATH, from_tf=False, config=config)
         no_decay = ['bias', 'LayerNorm.weight']
         optimizer_grouped_parameters = [

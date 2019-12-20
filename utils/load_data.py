@@ -66,13 +66,16 @@ class VietQAProcessor(object):
         """Reads a tab separated value file."""
         list_df = []
         for file in filename:
-            list_df.append(pd.read_csv(os.path.join(data_dir, file), lineterminator='\n'))
+            list_df.append(pd.read_csv(os.path.join(data_dir, file), lineterminator='\n', sep="\t"))
         df = pd.concat(list_df)
         df = df.reset_index()
         del df["index"]
         lines = []
         for i in range(len(df)):
-            lines.append([df["question"][i], df["text"][i], df["label"][i]])
+            if "label" in df:
+                lines.append([df["question"][i], df["text"][i], df["label"][i]])
+            else:
+                lines.append([df["question"][i], df["text"][i], 0])
         return lines
 
 def convert_examples_to_features(examples, tokenizer,

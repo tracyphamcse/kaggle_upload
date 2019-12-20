@@ -60,7 +60,7 @@ def evaluate(model, tokenizer, eval_dataset, prefix):
     preds = np.argmax(preds, axis=1)
 
     result = classification_report(preds, out_label_ids)
-    f1 = f1_score(preds, out_label_ids)
+    f1 = f1_score(preds, out_label_ids, average='weighted')
 
     logger.info("***** Eval results {} *****".format(prefix))
     logger.info("F1 = {}\n".format(f1))

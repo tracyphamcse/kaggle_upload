@@ -1,8 +1,9 @@
 import torch
 
 MODEL_TYPE = "bert"
-CLASSIFIER_TYPES = ["BertForSequenceClassification", "BertLSTM", "BertBow", "BertCNN"]
-MODEL_PATH = "model/bert_multilingual_cased_vn_finetuned"
+# CLASSIFIER_TYPES = ["BertForSequenceClassification", "BertLSTM", "BertBow", "BertCNN"]
+CLASSIFIER_TYPES = ["BertForSequenceClassification"]
+MODEL_PATH = "bert-base-uncased"
 
 
 SEED = 1234
@@ -10,16 +11,18 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Devices: {}".format(DEVICE))
 
 
-DATA_DIR = "data/"
+DATA_DIR = "/home/tracy/Kaggle/TF2_QA/data/"
 FILENAME = {
-    "train": ["train.csv"],
-    "valid": ["valid.csv"],
+    "train": ["sub_train_1.csv"],
+    "valid": ["sub_val_1.csv"],
+    "test" : ["test_1.csv"]
 }
 
 TRAIN_FILE = "train"
 VALID_FILE = "valid"
+TEST_FILE = "test"
 
-DO_LOWER_CASE = False
+DO_LOWER_CASE = True
 MAX_SEQ_LENGTH = 320
 MAX_QUES_LENGTH = 32
 MAX_ANSW_LENGTH = 288
@@ -43,5 +46,5 @@ KERNEL = 3
 NUM_FILTERS = 200
 OUT_MAXPOOL_DIM = 1168
 
-LABEL_LIST = [0, 1]
-LABEL_SIZE = 2
+LABEL_LIST = [0, 1, 2, 3]
+LABEL_SIZE = len(LABEL_LIST)
